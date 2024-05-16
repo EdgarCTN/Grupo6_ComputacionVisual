@@ -1,0 +1,8 @@
+Graficar un cubo que realice las siguientes transformaciones
+
+FORWARD (f) Avanza hacia adelante 5 Unidades de distancia
+RIGHT (r) Gira a la derecha 10 Grados 
+LEFT (l) Gira a la izquierda 10 Grados
+BACK (b) Retrocede 5 Unidades de distancia
+UPPITCH (u) Gira hacia arriba 10 Grados 
+DOWNPITCH (d) Gira hacia abajo 10 Grados
