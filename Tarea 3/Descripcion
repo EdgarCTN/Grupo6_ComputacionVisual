@@ -1,0 +1,15 @@
+Al código adjunto implementar las operaciones de modificación de los parámetros de proyección
+
+Ortogonal:
+Si presiono la letra (i) se debe decrementar en  -0.1 el limite izquierdo
+Si presiono la letra (d) se debe incrementar en   0.1 el limite derecho
+Si presiono la letra (a) se debe decrementar en -0.1 el limite inferior
+Si presiono la letra (u) se debe incrementar en   0.1 el limite superior
+Si presiono la letra (n) se debe decrementar en  -0.1 y (N) 
+
+se debe incrementar en   0.1 el Znear
+Si presiono la letra (f) se debe decrementar en  -0.1 y (F)  se debe incrementar en   0.1 el Zfar
+Perspectiva:
+Si presiono la letra (b) se debe decrementar en  -0.1 y (B)  se debe incrementar en   0.1 el Angulo
+Si presiono la letra (n) se debe decrementar en  -0.1 y (N)  se debe incrementar en   0.1 el Znear
+Si presiono la letra (f) se debe decrementar en  -0.1 y (F)  se debe incrementar en   0.1 el Zfar
