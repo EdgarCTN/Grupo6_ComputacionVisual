@@ -5,10 +5,10 @@
 #include <fstream>
 #include <sstream>
 
-// Puntos 3D del l醩er
+// Puntos 3D del l谩ser
 std::vector<std::vector<float>> laserPoints3D;
 
-// Funci髇 para leer puntos 3D desde un archivo
+// Funci贸n para leer puntos 3D desde un archivo
 void readPoints(const std::string& filename) {
 	std::ifstream file(filename);
 	if (!file.is_open()) {
@@ -27,7 +27,7 @@ void readPoints(const std::string& filename) {
 	}
 }
 
-// Funci髇 de renderizaci髇 de OpenGL
+// Funci贸n de renderizaci贸n de OpenGL
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -49,22 +49,19 @@ void initOpenGL() {
 	glPointSize(2.0f);
 }
 
-// Funci髇 principal
+// Funci贸n principal
 int main(int argc, char** argv) {
-	if (argc < 2) {
-		std::cerr << "Uso: " << argv[0] << " <archivo_de_puntos>" << std::endl;
-		return 1;
-	}
-	readPoints(argv[1]);  // Leer puntos desde el archivo
-	
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("3D Scanner Visualization");
-	initOpenGL();
-	glutDisplayFunc(display);
-	glutMainLoop();
-	
-	return 0;
+    std::string filename = "C:\\Users\\PC\\Desktop\\laser_points.txt"; // Ruta al archivo generado por Python
+    readPoints(filename);  // Leer puntos desde el archivo
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("3D Scanner Visualization");
+    initOpenGL();
+    glutDisplayFunc(display);
+    glutMainLoop();
+    
+    return 0;
 }
 
