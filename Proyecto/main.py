@@ -3,40 +3,40 @@ import numpy as np
 import math
 
 # Función para extraer la línea del láser de una imagen
-def extract_laser_line(frame):
+def extraer_linea_laser(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_red = np.array([0, 100, 100])
-    upper_red = np.array([10, 255, 255])
-    mask = cv2.inRange(hsv, lower_red, upper_red)
-    edges = cv2.Canny(mask, 50, 150)
-    laser_points = np.column_stack(np.where(edges > 0))
-    return laser_points
+    rojo_bajo = np.array([0, 100, 100])
+    rojo_alto = np.array([10, 255, 255])
+    mascara = cv2.inRange(hsv, rojo_bajo, rojo_alto)
+    bordes = cv2.Canny(mascara, 50, 150)
+    puntos_laser = np.column_stack(np.where(bordes > 0))
+    return puntos_laser
 
 # Función para capturar y procesar imágenes
-def capture_and_process_frames(steps):
+def capturar_y_procesar_frames(pasos):
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("Error al abrir la cámara")
         return []
 
-    laser_points_3d = []
+    puntos_laser_3d = []
 
-    for i in range(steps):
+    for i in range(pasos):
         ret, frame = cap.read()
         if not ret:
             print("Error al capturar el frame")
             break
 
-        laser_line = extract_laser_line(frame)
+        linea_laser = extraer_linea_laser(frame)
 
         # Calcular coordenadas 3D (esto es un ejemplo y necesita ajustes específicos)
-        for point in laser_line:
-            x = point[1] / frame.shape[1] * 2 - 1
-            y = point[0] / frame.shape[0] * 2 - 1
-            angle = i / steps * 360
-            z = math.sin(math.radians(angle))
+        for punto in linea_laser:
+            x = punto[1] / frame.shape[1] * 2 - 1
+            y = punto[0] / frame.shape[0] * 2 - 1
+            angulo = i / pasos * 360
+            z = math.sin(math.radians(angulo))
 
-            laser_points_3d.append((x, y, z))
+            puntos_laser_3d.append((x, y, z))
 
         cv2.imshow("Frame", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -44,18 +44,18 @@ def capture_and_process_frames(steps):
 
     cap.release()
     cv2.destroyAllWindows()
-    return laser_points_3d
+    return puntos_laser_3d
 
 # Guardar los puntos 3D en un archivo
-def save_points(points, filename):
-    with open(filename, 'w') as f:
-        for point in points:
-            f.write(f"{point[0]} {point[1]} {point[2]}\n")
+def guardar_puntos(puntos, nombre_archivo):
+    with open(nombre_archivo, 'w') as f:
+        for punto in puntos:
+            f.write(f"{punto[0]} {punto[1]} {punto[2]}\n")
 
 def main():
-    steps = 360  # Número de pasos de rotación
-    laser_points_3d = capture_and_process_frames(steps)
-    save_points(laser_points_3d, 'laser_points.txt')
+    pasos = 360  # Número de pasos de rotación
+    puntos_laser_3d = capturar_y_procesar_frames(pasos)
+    guardar_puntos(puntos_laser_3d, 'laser_points.txt')
 
 if __name__ == "__main__":
     main()
