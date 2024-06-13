@@ -131,7 +131,7 @@ void motion(int x, int y) {
 
 // Función principal
 int main(int argc, char** argv) {
-	std::string filename = "C:\\Users\\PC\\Desktop\\laser_points.txt"; // Ruta al archivo ATV.txt
+	std::string filename = "C:\\Users\\PC\\Desktop\\ATV.txt"; // Ruta al archivo ATV.txt
 	readPoints(filename);  // Leer puntos desde el archivo
 	
 	glutInit(&argc, argv);
