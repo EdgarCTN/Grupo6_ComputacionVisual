@@ -1,6 +1,9 @@
+
+// Este dos se deben ejecutar individualmente antes de usar el programa en Colab
 !pip install nvcc4jupyter
 %load_ext nvcc4jupyter
 
+//Programa principal
 %%cuda
 #include <cuda_runtime.h>
 #include <iostream>
