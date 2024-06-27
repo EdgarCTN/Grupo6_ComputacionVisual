@@ -35,17 +35,15 @@ int main()
 	
 	auto end = chrono::high_resolution_clock::now();
 	chrono::duration<double, micro> duration = end - start;
+	cout<<"\nSuma de primeros 20 resultados\n";
 	
-	// Con una impresión de los primeros 100 visualizo el resultado
-	for (int index = 0; index < 100; index++)
+	for (int index = 0; index < 20; index++)
 	{
 		cout << result[index] << endl;
 	}
-	
-	// Calculo el tiempo de ejecución en microsegundos
+
 	cout << "Tiempo de ejecución en CPU: " << fixed << setprecision(0) << duration.count() << " microsegundos" << endl;
 	
-	// Libero memoria en la RAM del HOST
 	delete[] arr1;
 	delete[] arr2;
 	delete[] result;
