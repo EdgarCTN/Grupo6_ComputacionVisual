@@ -1,0 +1,97 @@
+!pip install nvcc4jupyter
+%load_ext nvcc4jupyter
+
+%%cuda
+#include <cuda_runtime.h>
+#include <iostream>
+#include <iomanip>  // Para setprecision
+#define size 1000000
+using namespace std;
+
+// DEVICE
+
+__global__ void kernelVectorAdd(float* arr1, float* arr2, float* result, int n)
+{
+    // Obtengo el índice del hilo físico
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+
+    // Mientras el hilo sea válido para la operación
+    if (idx < n)
+    {
+        // Sumar los elementos correspondientes de arr1 y arr2
+        result[idx] = arr1[idx] + arr2[idx];
+    }
+}
+
+// HOST
+int main()
+{
+    // Separo memoria en la RAM del HOST
+    float* arr1 = new float[size];
+    float* arr2 = new float[size];
+    float* result = new float[size];
+    float* arr1_DEVICE = NULL;
+    float* arr2_DEVICE = NULL;
+    float* result_DEVICE = NULL;
+
+    // Inicializo los arreglos en el HOST
+    for (int index = 0; index < size; index++)
+    {
+        arr1[index] = index;          
+        arr2[index] = size - index;  
+    }
+
+    cout<<"Valores iniciales de los arreglos:\n";
+    for (int index = 0; index < 10; index++)
+    {
+        cout << "arr1[" << index << "] = " << arr1[index] << ", arr2[" << index << "] = " << arr2[index] << endl;
+    }
+
+    cudaMalloc((void**)&arr1_DEVICE, size * sizeof(float));
+    cudaMalloc((void**)&arr2_DEVICE, size * sizeof(float));
+    cudaMalloc((void**)&result_DEVICE, size * sizeof(float));
+
+    cudaMemcpy(arr1_DEVICE, arr1, size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(arr2_DEVICE, arr2, size * sizeof(float), cudaMemcpyHostToDevice);
+
+    ///////////////////////// EJECUTO EL KERNEL DE CUDA ////////////////////////////
+    //////// 512 Hilos por bloque
+    //////// ceil(size / 512.0) Bloques
+    int threadsPerBlock = 512;
+    int blocksPerGrid = (size + threadsPerBlock - 1) / threadsPerBlock;
+
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
+    // Empiezo a medir el tiempo en GPU
+    cudaEventRecord(start);
+
+    kernelVectorAdd<<<blocksPerGrid, threadsPerBlock>>>(arr1_DEVICE, arr2_DEVICE, result_DEVICE, size);
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+
+    float milliseconds = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+
+    cudaMemcpy(result, result_DEVICE, size * sizeof(float), cudaMemcpyDeviceToHost);
+    cout<<"\nSuma de primeros 20 resultados\n";
+    for (int index = 0; index < 20; index++)
+    {
+        cout << result[index] << endl;
+    }
+
+    float microseconds = milliseconds * 1000;
+    cout << "Tiempo de ejecución en GPU: " << fixed << setprecision(0) << microseconds << " microsegundos" << endl;
+
+    cudaFree(arr1_DEVICE);
+    cudaFree(arr2_DEVICE);
+    cudaFree(result_DEVICE);
+
+    delete[] arr1;
+    delete[] arr2;
+    delete[] result;
+
+    return 0;
+}
