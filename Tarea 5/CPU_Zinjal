@@ -1,0 +1,54 @@
+#include <iostream>
+#include <chrono>  
+#include <iomanip>  
+#define size 1000000
+using namespace std;
+
+
+void vectorAdd(float* arr1, float* arr2, float* result, int n)
+{
+	for (int idx = 0; idx < n; idx++)
+	{
+		result[idx] = arr1[idx] + arr2[idx];
+	}
+}
+
+int main()
+{
+
+	float* arr1 = new float[size];
+	float* arr2 = new float[size];
+	float* result = new float[size];
+	
+	
+	for (int index = 0; index < size; index++)
+	{
+		arr1[index] = index;
+		arr2[index] = size - index;
+	}
+	
+	// Medición del tiempo en CPU
+	auto start = chrono::high_resolution_clock::now();
+	
+	
+	vectorAdd(arr1, arr2, result, size);
+	
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, micro> duration = end - start;
+	
+	// Con una impresión de los primeros 100 visualizo el resultado
+	for (int index = 0; index < 100; index++)
+	{
+		cout << result[index] << endl;
+	}
+	
+	// Calculo el tiempo de ejecución en microsegundos
+	cout << "Tiempo de ejecución en CPU: " << fixed << setprecision(0) << duration.count() << " microsegundos" << endl;
+	
+	// Libero memoria en la RAM del HOST
+	delete[] arr1;
+	delete[] arr2;
+	delete[] result;
+	
+	return 0;
+}
